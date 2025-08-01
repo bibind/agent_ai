@@ -2,9 +2,13 @@ openai
 langchain
 langchain-community
 langgraph
-flytekit
+flytekit>=1.10
+flytekitplugins-envd
+flyteidl
+pyflyte
 fastapi
 uvicorn
 GitPython
 python-dotenv
 loguru
+

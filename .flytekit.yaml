@@ -1,0 +1,4 @@
+endpoint: http://localhost:30081
+project: agent-ai
+domain: development
+
