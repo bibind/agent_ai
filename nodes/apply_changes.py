@@ -2,6 +2,14 @@ from pathlib import Path
 from loguru import logger
 
 
+class PatchValidationError(Exception):
+    """Raised when git apply --check fails."""
+
+
+class PatchApplyError(Exception):
+    """Raised when applying the patch fails."""
+
+
 class ApplyChanges:
     """Apply generated patch to the repository."""
 
@@ -17,17 +25,16 @@ class ApplyChanges:
         try:
             repo.git.apply("--check", str(patch_file))
             logger.info("Patch validation succeeded")
-        except Exception as exc:  # GitCommandError or others
-            logger.error(f"Patch validation failed: {exc}")
-            context["patch_error"] = str(exc)
+        except Exception as exc:
             patch_file.unlink(missing_ok=True)
-            return context
+            raise PatchValidationError(str(exc)) from exc
+
         try:
             repo.git.apply(str(patch_file))
             logger.success("Applied patch to repository")
         except Exception as exc:
-            logger.error(f"Failed to apply patch: {exc}")
-            context["apply_error"] = str(exc)
+            patch_file.unlink(missing_ok=True)
+            raise PatchApplyError(str(exc)) from exc
         finally:
             patch_file.unlink(missing_ok=True)
         return context
