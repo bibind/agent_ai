@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Repo Browser</title>
+</head>
+<body>
+<h1>Repository</h1>
+<ul>
+{% for file in files %}
+    <li><a href="/edit?file_path={{ path }}/{{ file }}">{{ file }}</a></li>
+{% endfor %}
+</ul>
+</body>
+</html>
