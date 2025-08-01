@@ -8,6 +8,7 @@ class ApplyChanges:
     def run(self, context: dict) -> dict:
         repo = context["repo"]
         patch = context.get("generated_patch")
+        logger.info(patch)
         if not patch:
             logger.warning("No patch generated")
             return context
