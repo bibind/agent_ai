@@ -52,4 +52,10 @@ Placez ces variables dans un fichier `.env` et elles seront chargées par `setup
 - Assurez-vous que `OPENAI_API_KEY` est valide si vous utilisez OpenAI
 - Utilisez `--use_openai` uniquement si le paquet `openai` est installé et la clef configurée
 
+## 🔐 Sécurité et validation
+L'agent écrit toujours le patch généré dans un fichier temporaire et exécute
+`git apply --check` pour s'assurer qu'il est bien formé avant de l'appliquer.
+En cas d'échec de cette validation, le patch est ignoré et l'erreur est
+journalisée avec Loguru.
+
 

@@ -19,8 +19,11 @@ class GenerateCode:
         repo_path = Path(context["repo_path"])
         goal = context.get("goal")
         prompt = (
-            "Vous êtes un assistant IA qui modifie le dépôt pour l'objectif suivant: "
-            f"{goal}. Donnez le diff à appliquer."
+            "Tu es un agent IA. Ton objectif est : "
+            f"{goal}.\n"
+            "Retourne uniquement un patch Git compatible avec `git apply`. "
+            "Ne mets aucun commentaire ou markdown. Commence directement par "
+            "'--- a/' et finis par le diff complet."
         )
         logger.info("Generating code with LLM")
         message = self.llm([HumanMessage(content=prompt)])

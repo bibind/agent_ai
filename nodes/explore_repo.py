@@ -24,7 +24,9 @@ class ExploreRepo:
         repo_name = self.repo_url.rstrip("/").split("/")[-1].replace(".git", "")
         repo_path = workspace / repo_name
         if repo_path.exists():
-            logger.info(f"Repository already exists at {repo_path}, fetching updates")
+            logger.info(
+                f"Repository already exists at {repo_path}, fetching updates"
+            )
             repo = Repo(repo_path)
             repo.remote().fetch()
         else:
@@ -34,10 +36,19 @@ class ExploreRepo:
         timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
         branch_name = f"feat/{slug}-{timestamp}"
         repo.git.checkout('-b', branch_name)
-        context.update({
-            "repo": repo,
-            "repo_path": str(repo_path),
-            "branch_name": branch_name
-        })
+        file_list = [
+            str(p.relative_to(repo_path))
+            for p in repo_path.rglob("*")
+            if p.is_file()
+        ]
+        context.update(
+            {
+                "repo": repo,
+                "repo_path": str(repo_path),
+                "branch_name": branch_name,
+                "repo_files": file_list,
+            }
+        )
         logger.info(f"Created branch {branch_name}")
+        logger.info(f"Repository contains {len(file_list)} files")
         return context
