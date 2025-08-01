@@ -18,5 +18,5 @@ def generate_patch(prompt: str, model: str | None = None, temperature: float = 0
             raise RuntimeError("Ollama not installed")
         llm = Ollama(model=model)
     logger.info("Querying LLM for patch generation")
-    result = llm([HumanMessage(content=prompt)])
+    result = llm.invoke(HumanMessage(content=prompt))
     return result.content
