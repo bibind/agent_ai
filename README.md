@@ -38,12 +38,15 @@ python main.py --repo_url <url> --goal "Ajouter une fonctionnalité" [--use_open
 - `--repo_url` : dépôt Git cible
 - `--goal` : objectif en langage naturel
 - `--use_openai` : forcer l'utilisation de l'API OpenAI (sinon Ollama)
+- `--log_level` : niveau de verbosité (par défaut `LOG_LEVEL` ou `INFO`)
 
 ## 💬 Configuration de l’API Key OpenAI
 L'agent lit la clé API depuis la variable d'environnement `OPENAI_API_KEY`. Vous pouvez aussi définir :
 - `AI_MODEL` pour indiquer un modèle Ollama (ex. `llama2`)
 - `OLLAMA_BASE_URL` si Ollama n'utilise pas l'URL par défaut
 - `GIT_REPO_PATH` ou `REPO_PATH` pour cibler un dépôt local dans l'interface web
+- `LOG_LEVEL` pour définir le niveau de logs (INFO, DEBUG, ...)
+- `LOG_FILE` pour choisir le fichier de sortie (par défaut `agent.log`)
 
 Placez ces variables dans un fichier `.env` et elles seront chargées par `setup.sh` lors de l'installation.
 
@@ -57,6 +60,9 @@ L'agent écrit toujours le patch généré dans un fichier temporaire et exécut
 `git apply --check` pour s'assurer qu'il est bien formé avant de l'appliquer.
 En cas d'échec de cette validation, le patch est ignoré et l'erreur est
 journalisée avec Loguru.
+
+## 📝 Logs
+Un fichier `agent.log` est créé à la racine et roté automatiquement quand il atteint 1 Mo. Vous pouvez ajuster le niveau de verbosité avec la variable `LOG_LEVEL` ou l'option `--log_level`.
 
 ## 📦 Déploiement Flyte
 

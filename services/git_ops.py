@@ -5,6 +5,18 @@ from datetime import datetime
 import re
 
 
+class GitOpsError(Exception):
+    """Base exception for git operations."""
+
+
+class BranchCreationError(GitOpsError):
+    """Raised when branch creation fails."""
+
+
+class PushError(GitOpsError):
+    """Raised when pushing to remote fails."""
+
+
 def open_repo(path: str) -> Repo:
     return Repo(path)
 
@@ -19,8 +31,11 @@ def create_branch(repo: Repo, goal: str) -> str:
     slug = slugify(goal)[:20]
     timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
     branch_name = f"feat/{slug}-{timestamp}"
-    repo.git.checkout('-b', branch_name)
-    logger.info(f"Created branch {branch_name}")
+    try:
+        repo.git.checkout('-b', branch_name)
+        logger.info(f"Created branch {branch_name}")
+    except Exception as exc:
+        raise BranchCreationError(f"Could not create branch {branch_name}: {exc}") from exc
     return branch_name
 
 
@@ -36,7 +51,7 @@ def push_branch(repo: Repo, branch_name: str):
         repo.git.push("-u", "origin", branch_name)
         logger.info("Pushed branch")
     except Exception as exc:
-        logger.error(f"Failed to push: {exc}")
+        raise PushError(f"Failed to push: {exc}") from exc
 
 
 def repo_diff(repo: Repo) -> str:
