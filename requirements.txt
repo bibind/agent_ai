@@ -1,0 +1,9 @@
+openai
+langchain
+langgraph
+flytekit
+fastapi
+uvicorn
+GitPython
+python-dotenv
+loguru
