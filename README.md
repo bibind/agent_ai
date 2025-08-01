@@ -4,6 +4,12 @@ Ce dépôt contient un exemple minimal d'agent autonome capable d'orchestrer
 plusieurs tâches pour modifier automatiquement un dépôt Git. Il a été pensé
 comme démonstrateur pour l'automatisation des workflows de développement.
 
+Une interface Web simple basée sur **FastAPI** est fournie dans `web_ui/` pour
+explorer un dépôt, éditer des fichiers et déclencher une génération de code par
+IA. Les actions Git (création de branche, commit, push) sont réalisées via les
+services présents dans `services/` et orchestrées par un exemple de workflow
+`langgraph/workflows/agent_coder_flow.py`.
+
 ## Fonctionnalités principales
 
 - **Classification d'intention** : détermine le type de tâche (bugfix,
@@ -67,3 +73,14 @@ branche sur le dépôt distant.
 
 Ce dépôt fournit un squelette léger pour expérimenter la mise en place d'agents
 IA capables d'automatiser des tâches de développement.
+
+## Interface Web
+
+Exécutez l'application FastAPI pour parcourir et modifier localement le dépôt :
+
+```bash
+uvicorn web_ui.main:app --reload
+```
+
+Par défaut, le chemin du dépôt est celui du projet courant. Définissez la
+variable `REPO_PATH` pour cibler un autre répertoire.
