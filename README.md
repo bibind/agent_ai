@@ -58,4 +58,18 @@ L'agent écrit toujours le patch généré dans un fichier temporaire et exécut
 En cas d'échec de cette validation, le patch est ignoré et l'erreur est
 journalisée avec Loguru.
 
+## 📦 Déploiement Flyte
+
+Pour enregistrer les workflows sur votre cluster local :
+
+```bash
+./scripts/deploy_flyte.sh
+```
+
+Une fois publiés, le workflow d'exemple peut s'exécuter avec :
+
+```bash
+pyflyte run flyte/workflows/auto_commit.py auto_commit_workflow --repo_path /chemin/du/repo
+```
+
 
