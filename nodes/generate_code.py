@@ -1,22 +1,15 @@
-from pathlib import Path
 from loguru import logger
-from langchain.chat_models import ChatOpenAI
 from langchain.schema import HumanMessage
-from langchain_core.language_models.chat_models import BaseChatModel
+from services.ai_agent import get_chat_model, CONVERSATION_HISTORY
 
 class GenerateCode:
     """Generate or modify code using an LLM."""
 
     def __init__(self, use_openai: bool = False):
-        if use_openai:
-            self.llm = ChatOpenAI()
-        else:
-            # Defaults to local ollama model
-            from langchain.llms import Ollama
-            self.llm = Ollama(model="deepseek-coder-v2")
+        model = "openai" if use_openai else None
+        self.llm = get_chat_model(model=model)
 
     def run(self, context: dict) -> dict:
-        repo_path = Path(context["repo_path"])
         goal = context.get("goal")
         prompt = (
             "Tu es un agent IA. Ton objectif est : "
@@ -26,13 +19,8 @@ class GenerateCode:
             "'--- a/' et finis par le diff complet."
         )
         logger.info("Generating code with LLM")
-        if isinstance(self.llm, BaseChatModel):
-            message = self.llm.invoke(HumanMessage(content=prompt))
-            context["generated_patch"] = message.content
-            logger.debug(message.content)
-        else:
-            message = self.llm.invoke(prompt)
-            #message = self.llm.invoke(HumanMessage(content=prompt))
-            context["generated_patch"] = message
-            logger.debug(message)
+        message = self.llm.invoke(HumanMessage(content=prompt))
+        context["generated_patch"] = message.content
+        CONVERSATION_HISTORY.append((prompt, message.content))
+        logger.debug(message.content)
         return context
