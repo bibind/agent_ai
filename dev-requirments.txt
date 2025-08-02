@@ -10,4 +10,4 @@ mypy
 
 # Type hints (optionnel)
 types-requests
-types-python-dotenv
+
