@@ -2,6 +2,9 @@ from loguru import logger
 from langchain.schema import HumanMessage
 from services.ai_agent import get_chat_model, CONVERSATION_HISTORY
 
+from . import NodeContext
+
+
 class GenerateCode:
     """Generate or modify code using an LLM."""
 
@@ -9,7 +12,7 @@ class GenerateCode:
         model = "openai" if use_openai else None
         self.llm = get_chat_model(model=model)
 
-    def run(self, context: dict) -> dict:
+    def run(self, context: NodeContext) -> NodeContext:
         goal = context.get("goal")
         prompt = (
             "Tu es un agent IA. Ton objectif est : "

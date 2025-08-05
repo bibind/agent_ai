@@ -1,9 +1,12 @@
 from loguru import logger
 
+from . import NodeContext
+
+
 class GeneratePlan:
     """Generate a simple plan for the agent."""
 
-    def run(self, context: dict) -> dict:
+    def run(self, context: NodeContext) -> NodeContext:
         goal = context.get("goal")
         # Placeholder plan generation
         plan = [

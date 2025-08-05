@@ -1,5 +1,7 @@
 from loguru import logger
 
+from . import NodeContext
+
 
 class CommitAndPush:
     """Commit changes and push the branch."""
@@ -7,7 +9,7 @@ class CommitAndPush:
     def __init__(self, commit_message: str):
         self.commit_message = commit_message
 
-    def run(self, context: dict) -> dict:
+    def run(self, context: NodeContext) -> NodeContext:
         repo = context["repo"]
         branch_name = context["branch_name"]
         repo.git.add(all=True)

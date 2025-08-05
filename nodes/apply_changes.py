@@ -1,6 +1,8 @@
 from pathlib import Path
 from loguru import logger
 
+from . import NodeContext
+
 
 class PatchValidationError(Exception):
     """Raised when git apply --check fails."""
@@ -13,7 +15,7 @@ class PatchApplyError(Exception):
 class ApplyChanges:
     """Apply generated patch to the repository."""
 
-    def run(self, context: dict) -> dict:
+    def run(self, context: NodeContext) -> NodeContext:
         repo = context["repo"]
         patch = context.get("generated_patch")
         logger.info(patch)

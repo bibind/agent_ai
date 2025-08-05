@@ -1,9 +1,12 @@
 from loguru import logger
 
+from . import NodeContext
+
+
 class ClassifyIntent:
     """Node to classify user intent from a goal."""
 
-    def run(self, context: dict) -> dict:
+    def run(self, context: NodeContext) -> NodeContext:
         goal = context.get("goal", "")
         # Very naive classification just for example
         if "bug" in goal.lower():

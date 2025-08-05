@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from typing import Callable, Dict, List, Optional
+from dataclasses import asdict, dataclass, field, fields, replace
+from typing import Callable, Dict, List, Optional, cast
 
 from loguru import logger
 
@@ -14,6 +14,7 @@ from nodes.generate_code import GenerateCode
 from nodes.apply_changes import ApplyChanges
 from nodes.validate import Validate
 from nodes.commit_and_push import CommitAndPush
+from nodes import NodeContext
 
 try:  # Try to import the real LangGraph library
     from langgraph.graph import END, StateGraph  # type: ignore
@@ -103,9 +104,15 @@ class GraphBuilder:
     # ------------------------------------------------------------------
     def _wrap_node(self, node: object) -> Callable[[AgentState], AgentState]:
         def _runner(state: AgentState) -> AgentState:
-            context = node.run(state.__dict__.copy())
-            for key, value in context.items():
-                setattr(state, key, value)
+            context = cast(NodeContext, asdict(state))
+            updated = node.run(context)
+            field_names = {f.name for f in fields(AgentState)}
+            state = replace(
+                state, **{k: v for k, v in updated.items() if k in field_names}
+            )
+            for key, value in updated.items():
+                if key not in field_names:
+                    setattr(state, key, value)
             return state
 
         return _runner
