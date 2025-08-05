@@ -1,6 +1,6 @@
 from git import Repo
 from pathlib import Path
-from loguru import logger
+from logging_config import logger
 from datetime import datetime
 import re
 

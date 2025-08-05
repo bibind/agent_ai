@@ -1,5 +1,5 @@
 from pathlib import Path
-from loguru import logger
+from logging_config import logger
 
 from . import NodeContext
 

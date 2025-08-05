@@ -1,4 +1,4 @@
-from loguru import logger
+from logging_config import logger
 from langchain.schema import HumanMessage
 from services.ai_agent import get_chat_model, CONVERSATION_HISTORY
 

@@ -4,7 +4,7 @@ from typing import Tuple
 
 from flytekit import task, workflow
 from git import Repo
-from loguru import logger
+from logging_config import logger
 
 from services.ai_agent import generate_patch
 from services.git_ops import slugify
