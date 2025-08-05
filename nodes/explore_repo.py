@@ -2,7 +2,7 @@ import re
 from datetime import datetime
 from pathlib import Path
 from git import Repo
-from loguru import logger
+from logging_config import logger
 
 from . import NodeContext
 

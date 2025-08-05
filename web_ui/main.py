@@ -6,7 +6,8 @@ from pathlib import Path
 from services.git_ops import open_repo, create_branch, commit_all, push_branch, repo_diff
 from services.code_analyzer import list_files, read_file, write_file
 from services.ai_agent import generate_patch
-from loguru import logger
+from logging_config import configure_logging, logger
+from uuid import uuid4
 import os
 
 app = FastAPI()
@@ -14,6 +15,15 @@ BASE_REPO_PATH = Path(os.environ.get("REPO_PATH", "."))
 
 templates = Jinja2Templates(directory=str(Path(__file__).parent / "templates"))
 app.mount("/static", StaticFiles(directory=str(Path(__file__).parent / "static")), name="static")
+configure_logging(level=os.environ.get("LOG_LEVEL", "INFO"))
+
+
+@app.middleware("http")
+async def add_request_id(request: Request, call_next):
+    request_id = request.headers.get("X-Request-ID", str(uuid4()))
+    with logger.contextualize(request_id=request_id):
+        response = await call_next(request)
+    return response
 
 
 def get_repo():

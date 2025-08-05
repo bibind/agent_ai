@@ -1,4 +1,4 @@
-from loguru import logger
+from logging_config import logger
 from langchain.chat_models import ChatOpenAI
 from langchain.schema import HumanMessage
 from langchain_core.language_models.chat_models import BaseChatModel

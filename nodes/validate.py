@@ -1,4 +1,4 @@
-from loguru import logger
+from logging_config import logger
 from flytekit import task, workflow
 from pathlib import Path
 import subprocess
