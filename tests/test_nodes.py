@@ -83,7 +83,18 @@ def test_generate_code_uses_dummy_llm(monkeypatch):
 
 def test_validate_runs_pytest_success(tmp_path):
     repo = init_repo(tmp_path)
+    (tmp_path / "test_sample.py").write_text("def test_ok():\n    assert True\n")
     node = Validate()
     ctx = node.run({"repo_path": str(tmp_path)})
-    assert ctx["validation_result"] == "success"
+    assert ctx["validation_result"]["status"] == "success"
+    assert Path(ctx["validation_result"]["report"]).exists()
+
+
+def test_validate_runs_pytest_failure(tmp_path):
+    repo = init_repo(tmp_path)
+    (tmp_path / "test_fail.py").write_text("def test_fail():\n    assert False\n")
+    node = Validate()
+    ctx = node.run({"repo_path": str(tmp_path)})
+    assert ctx["validation_result"]["status"] == "failure"
+    assert Path(ctx["validation_result"]["report"]).exists()
 
