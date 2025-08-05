@@ -1,18 +1,26 @@
 from loguru import logger
 from flytekit import task, workflow
+from pathlib import Path
+import subprocess
 
 from . import NodeContext
 
 
 @task
-def run_tests(repo_path: str) -> str:
-    # Placeholder for real validation commands
+def run_tests(repo_path: str) -> dict:
+    """Run pytest in the given repository and save the report."""
     logger.info(f"Running tests in {repo_path}")
-    return "success"
+    report_path = Path(repo_path) / "pytest_report.txt"
+    result = subprocess.run(
+        ["pytest", "-q"], cwd=repo_path, capture_output=True, text=True
+    )
+    report_path.write_text(result.stdout + result.stderr)
+    status = "success" if result.returncode == 0 else "failure"
+    return {"status": status, "report": str(report_path)}
 
 
 @workflow
-def validation_workflow(repo_path: str) -> str:
+def validation_workflow(repo_path: str) -> dict:
     return run_tests(repo_path=repo_path)
 
 
