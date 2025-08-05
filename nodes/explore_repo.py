@@ -4,6 +4,8 @@ from pathlib import Path
 from git import Repo
 from loguru import logger
 
+from . import NodeContext
+
 
 def slugify(text: str) -> str:
     text = text.lower()
@@ -17,7 +19,7 @@ class ExploreRepo:
     def __init__(self, repo_url: str):
         self.repo_url = repo_url
 
-    def run(self, context: dict) -> dict:
+    def run(self, context: NodeContext) -> NodeContext:
         goal = context.get("goal", "goal")
         workspace = Path("/tmp/agent_workspace")
         workspace.mkdir(parents=True, exist_ok=True)

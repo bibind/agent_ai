@@ -1,6 +1,8 @@
 from loguru import logger
 from flytekit import task, workflow
 
+from . import NodeContext
+
 
 @task
 def run_tests(repo_path: str) -> str:
@@ -17,7 +19,7 @@ def validation_workflow(repo_path: str) -> str:
 class Validate:
     """Run Flyte validation workflow."""
 
-    def run(self, context: dict) -> dict:
+    def run(self, context: NodeContext) -> NodeContext:
         repo_path = context["repo_path"]
         logger.info("Starting Flyte validation workflow")
         result = validation_workflow(repo_path=repo_path)
