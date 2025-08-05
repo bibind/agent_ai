@@ -30,7 +30,7 @@ jobs:
       - name: ✅ Run tests with pytest
         run: |
           source .venv/bin/activate
-          PYTHONPATH=. pytest -v tests/
+          pytest
 
       - name: 📤 Upload test results (optional)
         if: always()
